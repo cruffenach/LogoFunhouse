@@ -8,91 +8,6 @@
 
 #import "SFSimpleLogoAnimationView.h"
 
-@interface SFLogoPathOptions ()
-@property (nonatomic, assign) NSNumber *iterations;
-@property (nonatomic, assign) NSNumber *amplitude;
-@property (nonatomic, assign) NSNumber *resolution;
-@property (nonatomic, assign) NSNumber *frequency;
-@property (nonatomic, strong) NSArray *iterationColors;
-@end
-
-static const NSInteger kSFSimpleLogoIterations = 5.0;
-static const CGFloat kSFSimpleLogoAmplitude = 0.2;
-static const NSInteger kSFSimpleLogoResolution = 200.0;
-static const CGFloat kSFSimpleLogoFrequency = 2.0;
-
-NSArray * SFLogoPathDefaultColors() {
-    UIColor *brownColor = [UIColor colorWithRed:(216.0/255.0)
-                                          green:(112.0/255.0)
-                                           blue:(95.0/255.0)
-                                          alpha:1];
-    UIColor *blueColor = [UIColor colorWithRed:(60.0/255.0)
-                                         green:(124.0/255.0)
-                                          blue:(132.0/255.0)
-                                         alpha:0.7];
-    return @[brownColor,
-             blueColor,
-             brownColor,
-             blueColor,
-             blueColor];
-}
-
-@implementation SFLogoPathOptions
-
-+ (instancetype)simpleLogoPathOptions {
-    SFLogoPathOptions *defaultOptions = [[SFLogoPathOptions alloc] initWithIterations:@(kSFSimpleLogoIterations)
-                                                                            amplitude:@(kSFSimpleLogoAmplitude)
-                                                                           resolution:@(kSFSimpleLogoResolution)
-                                                                            frequency:@(kSFSimpleLogoFrequency)];
-    [defaultOptions setIterationColors:SFLogoPathDefaultColors()];
-    return defaultOptions;
-}
-
-- (instancetype)initWithIterations:(NSNumber*)iterations
-                         amplitude:(NSNumber*)amplitude
-                        resolution:(NSNumber*)resolution
-                         frequency:(NSNumber*)frequency {
-    
-    self = [super init];
-    if (self) {
-        self.iterations = iterations;
-        self.amplitude = amplitude;
-        self.resolution = resolution;
-        self.frequency = frequency;
-    }
-    return self;
-}
-
-- (void)dealloc {
-    self.iterations = nil;
-    self.amplitude = nil;
-    self.resolution = nil;
-    self.frequency = nil;
-    self.iterationColors = nil;
-}
-
-#pragma mark - Overrides
-
-- (void)setColor:(UIColor*)lineColor {
-    self.iterationColors = @[lineColor];
-    
-}
-
-- (void)setIterationColors:(NSArray*)iterationColors {
-    if (iterationColors.count != _iterations.unsignedIntegerValue) {
-        NSLog(@"[SFLogoPathOptions] : WARNING called setIterationColors: with colors: %@ on options with %@ iterations. The number of colors should match the number of iterations", iterationColors, _iterations);
-    }
-    self.iterationColors = iterationColors;
-}
-
-- (UIColor*)colorForIteration:(NSUInteger)iterationNumber {
-    return !(_iterationColors || !_iterationColors.lastObject) ? [UIColor blackColor] :
-    iterationNumber < _iterationColors.count ? _iterationColors[iterationNumber] :
-    _iterationColors.lastObject;
-}
-
-@end
-
 @interface SFSimpleLogoLineView : UIView
 - (void)setPath:(UIBezierPath*)path;
 @property (nonatomic, assign) UIColor *color;
@@ -198,8 +113,8 @@ CGFloat SFStrokeOffset(CGFloat t, CGFloat b, CGFloat c, CGFloat d) {
 
 - (void)displayLinkFired:(CADisplayLink*)displayLink {
     NSTimeInterval elapsedTime = ([[NSDate date] timeIntervalSince1970]-_start)+(_duration*self.initialOffset);
-    double time = (elapsedTime - (_duration*floorf(elapsedTime/_duration)))/_duration;
-    self.strokeLocation = pow(time, 1.0);
+    double normalizedTime = (elapsedTime - (_duration*floorf(elapsedTime/_duration)))/_duration;
+    self.strokeLocation = normalizedTime;
 }
 
 #pragma mark - Overrides

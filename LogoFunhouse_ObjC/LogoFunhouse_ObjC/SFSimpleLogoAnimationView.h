@@ -10,20 +10,6 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 
-@interface SFLogoPathOptions : NSObject
-+ (instancetype)simpleLogoPathOptions;
-- (instancetype)initWithIterations:(NSNumber*)iterations
-                         amplitude:(NSNumber*)amplitude
-                        resolution:(NSNumber*)resolution
-                         frequency:(NSNumber*)frequency;
-- (void)setColor:(UIColor*)lineColor;
-- (void)setIterationColors:(NSArray*)iterationColors;
-- (UIColor*)colorForIteration:(NSUInteger)iterationNumber;
-@end
-
-@interface SFLogoView : UIView
-@end
-
 @interface SFSimpleLogoAnimationView : UIView
 
 @property (nonatomic, assign) float iterations;
