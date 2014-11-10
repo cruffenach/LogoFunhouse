@@ -12,6 +12,8 @@ The logo is also animatable. Specifically the length of the stroke of each line 
 
 Below are a couple example of the results you can get by tweaking these parameters.
 
+![](gifs/gif3.gif)
+
 ![](gifs/gif1.gif)
 
 ![](gifs/gif2.gif)
